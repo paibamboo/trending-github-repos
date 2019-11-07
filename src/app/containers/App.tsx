@@ -9,14 +9,10 @@ import {config as appConfig} from "../../../config";
 import {setupCss} from "../helpers/setupCss";
 import {Translator} from "../models/Translator";
 import {ITranslator} from "../models/TranslatorInterfaces";
-import {AboutPage} from "../pages/AboutPage";
-import {CounterPage} from "../pages/CounterPage";
 import {HomePage} from "../pages/HomePage";
-import {StarsPage} from "../pages/StarsPage";
 import {IStore} from "../redux/IStore";
 import {RoutePageMap} from "../routes/routes";
 import {translationsSelector} from "../selectors/translationsSelector";
-import {Header} from "./Header";
 
 setupCss();
 
@@ -37,10 +33,7 @@ interface IStateToProps {
 
 class App extends React.Component<IStateToProps> {
   private components: RoutePageMap = {
-    aboutPage: AboutPage,
-    counterPage: CounterPage,
-    homePage: HomePage,
-    starsPage: StarsPage
+    homePage: HomePage
   };
   public render(): JSX.Element {
     const {route, translations: {notFound}} = this.props;
@@ -48,7 +41,6 @@ class App extends React.Component<IStateToProps> {
     return (
       <section className={classNames.container}>
         <Helmet {...appConfig.app.head}/>
-        <Header/>
         {segment && this.components[segment] ? React.createElement(this.components[segment]) : <div>{notFound}</div>}
       </section>
     );

@@ -87,7 +87,7 @@ app.get("*", (req: express.Request, res: express.Response) => {
 
       // render again from the initial data
       const markup = renderToString(
-        <Provider store={store} key="provider">
+        <Provider key="provider" store={store}>
           <RouterProvider router={router}>
             <App/>
           </RouterProvider>
@@ -109,7 +109,7 @@ app.get("*", (req: express.Request, res: express.Response) => {
 
     // first render to activate constructor to dispatch actions for loading initial data
     renderToString(
-      <Provider store={store} key="provider">
+      <Provider key="provider" store={store}>
         <RouterProvider router={router}>
           <App/>
         </RouterProvider>
@@ -137,7 +137,7 @@ app.listen(appConfig.port, appConfig.host, (err) => {
 function renderHTML(markup: string, initialState: Partial<IStore>): string {
   const manifest = require("../build/manifest.json");
   const html = renderToString(
-    <Html markup={markup} manifest={manifest} initialState={initialState}/>
+    <Html initialState={initialState} manifest={manifest} markup={markup}/>
   );
   return `<!doctype html> ${html}`;
 }

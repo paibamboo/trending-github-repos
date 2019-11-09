@@ -1,5 +1,7 @@
 import * as React from "react";
 
+/* eslint-disable react/prop-types, react/display-name */
+
 const Stage: React.FunctionComponent<{initialState: any}> = ({children, initialState}) => {
   const [state, setState] = React.useState(initialState);
   return (
@@ -21,9 +23,9 @@ export function withInitialState(initialState: any): (
       <Stage initialState={initialState}>
         {renderChildrenFn(story, context)}
       </Stage>
-      <div style={{backgroundColor: "#eee", marginTop: 30, maxWidth: 500, overflowX: "auto", padding: 10}}>
-        initialState: {JSON.stringify(initialState)}
-      </div>
+      <pre style={{backgroundColor: "#eee", marginTop: 30}}>
+        initialState: {JSON.stringify(initialState, null, 2)}
+      </pre>
     </>
   );
 }

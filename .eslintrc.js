@@ -24,9 +24,15 @@ const tslintRules = {
     }
   ],
   "hex-format": true,
+  "import-react": [
+    true,
+    {
+      "type": "star"
+    }
+  ],
   "import-spacing": true,
-  "interface-sort-keys": true,
   "increment-decrement": true,
+  "interface-sort-keys": true,
   "jquery-deferred-must-complete": true,
   "jsdoc-format": true,
   "jsx-boolean-value": true,
@@ -61,7 +67,7 @@ const tslintRules = {
     120
   ],
   "mocha-avoid-only": true,
-  "no-backbone-get-set-outside-model": true,
+  "no-backbone-get-set-outside-model": false,
   "no-cookies": true,
   "no-delete-expression": true,
   "no-disable-auto-sanitization": true,
@@ -128,7 +134,12 @@ const tslintRules = {
       }
     ]
   ],
-  "react-this-binding-issue": true,
+  "react-this-binding-issue": [
+    true,
+    {
+      "bind-decorators": ["autobind"]
+    }
+  ],
   "semicolon": [
     true,
     "always"
@@ -175,33 +186,11 @@ const tslintRules = {
 };
 
 module.exports = {
+  "extends": "plugin:react/recommended",
   "env": {
     "browser": true,
     "node": true
   },
-  "overrides": [
-    {
-      "files": ["*.stories.tsx"],
-      "rules": {
-        "@typescript-eslint/tslint/config": [
-          "error",
-          {
-            "rulesDirectory": [
-              "node_modules/tslint-react/rules",
-              "node_modules/tslint-microsoft-contrib",
-              "node_modules/@crazyfactory/tslint-rules/lib"
-            ],
-            "rules": {
-              ...tslintRules,
-              "export-name": false,
-              "jsx-no-lambda": false,
-              "react-this-binding-issue": false,
-            }
-          }
-        ]
-      }
-    }
-  ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "project": "tsconfig.json",
@@ -295,7 +284,7 @@ module.exports = {
     "no-extra-semi": "error",
     "no-fallthrough": "off",
     "no-invalid-regexp": "error",
-    "no-invalid-this": "error",
+    "no-invalid-this": "off",
     "no-multi-str": "off",
     "no-multiple-empty-lines": "error",
     "no-new-func": "error",
@@ -321,6 +310,7 @@ module.exports = {
       "consistent-as-needed"
     ],
     "radix": "error",
+    "react/jsx-sort-props": "error",
     "space-before-function-paren": ["error", "never"],
     "use-isnan": "error",
     "valid-typeof": "off",
@@ -335,5 +325,18 @@ module.exports = {
         "rules": tslintRules
       }
     ]
+  },
+  "overrides": [
+    {
+      "files": ["*.stories.tsx"],
+      "rules": {
+        "react/prop-types": "off"
+      }
+    }
+  ],
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
   }
 };

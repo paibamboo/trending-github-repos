@@ -29,7 +29,7 @@ router.start();
 renderOrHydrate(
   (
     <ReactHotLoader>
-      <Provider store={store} key="provider">
+      <Provider key="provider" store={store}>
         <RouterProvider router={router}>
           <App/>
         </RouterProvider>

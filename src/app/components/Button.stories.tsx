@@ -1,3 +1,5 @@
+// tslint:disable:export-name jsx-no-lambda jsx-no-multiline-js react-this-binding-issue
+
 import * as React from "react";
 import {Color} from "../constants";
 import {withInitialState} from "../helpers/withInitialState";
@@ -26,8 +28,8 @@ export const StyledButton = () => {
 };
 export const SwitchableButton = ({state, setState}) => (
   <Button
-    type={state.type}
     onClick={() => setState({type: state.type === "primary" ? "secondary" : "primary"})}
+    type={state.type}
   >
     Click me!
   </Button>

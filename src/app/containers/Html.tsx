@@ -21,16 +21,16 @@ export class Html extends React.Component<IHtmlProps> {
 
     // styles from css files
     const links = this.getFileNames(".css").map(
-      (href, i) => <link key={i} href={href} rel="stylesheet" type="text/css"/>
+      (href, i) => <link href={href} key={i} rel="stylesheet" type="text/css"/>
     );
 
     // scripts
-    const scripts = this.getFileNames(".js").map((src, i) => <script src={src} key={i}/>);
+    const scripts = this.getFileNames(".js").map((src, i) => <script key={i} src={src}/>);
 
     const initialStateScript = (
       <script
-        dangerouslySetInnerHTML={{__html: `window.__INITIAL_STATE__=${serialize(initialState, {isJSON: true})};`}}
         charSet="UTF-8"
+        dangerouslySetInnerHTML={{__html: `window.__INITIAL_STATE__=${serialize(initialState, {isJSON: true})};`}}
       />
     );
 
@@ -44,11 +44,11 @@ export class Html extends React.Component<IHtmlProps> {
           {head.script.toComponent()}
           {renderStyles}
           {links}
-          <link rel="shortcut icon" href="/favicon.ico"/>
+          <link href="/favicon.ico" rel="shortcut icon"/>
         </head>
         <body>
           {/* tslint:disable-next-line:react-no-dangerous-html */}
-          <main id="app" dangerouslySetInnerHTML={{__html: markup}}/>
+          <main dangerouslySetInnerHTML={{__html: markup}} id="app"/>
           {initialStateScript}
           {scripts}
         </body>

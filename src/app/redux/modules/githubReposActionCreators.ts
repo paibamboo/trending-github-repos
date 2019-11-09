@@ -2,17 +2,17 @@ import {IGithubRepo} from "../../models/GithubRepoInterfaces";
 import {createAsyncActions} from "./baseModule";
 
 export interface ISearchGithubReposPayload {
-  order: string;
+  order: "desc" | "asc";
   page: number;
   perPage: number;
   q: string;
-  sort: string;
+  sort: "stars" | "forks" | "help-wanted-issues" | "updated";
 }
 
 export interface ISearchGithubReposFulfilled {
   githubRepos: IGithubRepo[];
+  hasMore: boolean;
   page: number;
-  perPage: number;
 }
 
 // tslint:disable-next-line:export-name

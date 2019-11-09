@@ -10,7 +10,7 @@ describe("githubReposModule", () => {
         hasMore: true,
         page: 0,
         pending: false,
-        perPage: 30
+        perPage: 10
       };
       expect(githubReposReducer(undefined, {type: undefined})).toEqual(initialState);
     });
@@ -49,15 +49,16 @@ describe("githubReposModule", () => {
         hasMore: false,
         page: 0,
         pending: false,
-        perPage: 30
+        perPage: 10
       };
       expect(githubReposReducer(state, searchGithubRepos.setFulfilled({
         githubRepos: [{description: "d", forksCount: 10, language: "Java", name: "n", stargazersCount: 2, id: 3}],
-        page: 1,
-        perPage: 10
+        hasMore: false,
+        page: 1
       }))).toEqual({
         ...state,
         githubRepos: [{description: "d", forksCount: 10, language: "Java", name: "n", stargazersCount: 2, id: 3}],
+        hasMore: false,
         page: 1,
         pending: false,
         perPage: 10
@@ -83,11 +84,11 @@ describe("githubReposModule", () => {
     it("handles actions with unknown type", () => {
       const state: IGithubReposState = {
         error: "",
-        githubRepos: [],
+        githubRepos: [{description: "d", forksCount: 10, language: "Java", name: "n", stargazersCount: 2, id: 3}],
         hasMore: true,
-        page: 0,
+        page: 1,
         pending: false,
-        perPage: 30
+        perPage: 10
       };
       expect(githubReposReducer(state, {type: "unknown"} as any)).toBe(state);
     });

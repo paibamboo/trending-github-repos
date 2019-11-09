@@ -16,7 +16,7 @@ describe("SettingsSaga", () => {
         {
           dispatch: (action) => dispatched.push(action)
         },
-        (new SettingsSaga()).fetchTranslations,
+        (new SettingsSaga(null)).fetchTranslations,
         {
           payload: "en",
           type: "SETTINGS/SET_LANGUAGE"
@@ -37,7 +37,7 @@ describe("SettingsSaga", () => {
         {
           dispatch: (action) => dispatched.push(action)
         },
-        (new SettingsSaga()).fetchTranslations,
+        (new SettingsSaga(null)).fetchTranslations,
         {
           payload: "en",
           type: "SETTINGS/SET_LANGUAGE"
@@ -54,7 +54,7 @@ describe("SettingsSaga", () => {
   describe("registerListeners", () => {
     it("listens for setLanguage INVOKED and calls fetchTranslations", () => {
       const spied = jest.spyOn(ReduxSagaEffects, "fork");
-      const settingsSaga = new SettingsSaga();
+      const settingsSaga = new SettingsSaga(null);
       settingsSaga.watch();
       const gen = (spied.mock.calls[0][0] as any)();
       expect(

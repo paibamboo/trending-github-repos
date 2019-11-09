@@ -16,7 +16,7 @@ const initialState: IGithubReposState = {
   hasMore: true,
   page: 0,
   pending: false,
-  perPage: 30
+  perPage: 10
 };
 
 export function githubReposReducer(
@@ -33,9 +33,9 @@ export function githubReposReducer(
       return {
         ...state,
         githubRepos: action.payload.githubRepos,
+        hasMore: action.payload.hasMore,
         page: action.payload.page,
-        pending: false,
-        perPage: action.payload.perPage
+        pending: false
       };
     case getType(githubReposActionCreators.searchGithubRepos.setRejected):
       return {

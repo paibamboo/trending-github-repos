@@ -1,11 +1,11 @@
 import {shallow} from "enzyme";
 import * as React from "react";
-import {GithubReposInfiniteTable, IGithubReposInfiniteTableTranslation} from "../components/GithubReposInfiniteTable";
+import {GithubReposInfiniteTable} from "../components/GithubReposInfiniteTable";
 import {IGithubRepo} from "../models/GithubRepoInterfaces";
 import {IStore} from "../redux/IStore";
 import {ISearchGithubReposParams} from "../redux/modules/githubReposActionCreators";
 import {IGithubReposState} from "../redux/modules/githubReposModule";
-import {mapDispatchToProps, mapStateToProps, UnconnectedHomePage} from "./HomePage";
+import {IHomePageTranslation, mapDispatchToProps, mapStateToProps, UnconnectedHomePage} from "./HomePage";
 describe("<HomePage />", () => {
   const rawTranslation = {
     "Description": "Description",
@@ -15,8 +15,9 @@ describe("<HomePage />", () => {
     "Name": "Name",
     "Stars count": "Stars count"
   };
-  const translation: IGithubReposInfiniteTableTranslation = {
+  const translation: IHomePageTranslation = {
     description: "Description",
+    emptyText: "No data",
     forksCount: "Forks count",
     id: "Id",
     language: "Language",

@@ -16,7 +16,7 @@ export interface ISearchGithubReposPayload {
 }
 
 export interface ISearchGithubReposRejectedPayload {
-  hasMore: boolean;
+  openErrorModal: boolean;
 }
 
 // tslint:disable-next-line:export-name

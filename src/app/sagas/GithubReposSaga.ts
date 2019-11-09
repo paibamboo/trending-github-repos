@@ -26,7 +26,11 @@ export class GithubReposSaga extends BaseSaga {
         page: action.payload.page + 1
       }));
     } catch (e) {
-      yield put(searchGithubRepos.setRejected(null, e.message));
+      yield put(
+        searchGithubRepos.setRejected(
+          {openErrorModal: true}, e.status ? e.message : "Something went wrong."
+        )
+      );
     }
   }
 

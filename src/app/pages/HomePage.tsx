@@ -14,8 +14,12 @@ import {
 import {IGithubReposState} from "../redux/modules/githubReposModule";
 import {translationsSelector} from "../selectors/translationsSelector";
 
+export interface IHomePageTranslation extends IGithubReposInfiniteTableTranslation {
+  emptyText: string;
+}
+
 interface IStateProps extends IGithubReposState {
-  translation: IGithubReposInfiniteTableTranslation;
+  translation: IHomePageTranslation;
 }
 
 interface IDispatchProps {
@@ -44,6 +48,7 @@ class HomePage extends React.Component<Props> {
         dataSource={githubRepos}
         hasMore={hasMore}
         loading={pending}
+        locale={translation}
         onLoadMore={this.handleLoadMore}
         rowKey={"id"}
         rowMinHeight={window.innerHeight / 10}
@@ -71,6 +76,7 @@ const componentTranslationsSelector = createSelector(
     const translator: ITranslator = new Translator(translations);
     return {
       description: translator.translate("Description"),
+      emptyText: translator.translate("No data"),
       forksCount: translator.translate("Forks count"),
       id: translator.translate("Id"),
       language: translator.translate("Language"),

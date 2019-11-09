@@ -43,7 +43,7 @@ export function githubReposReducer(
       return {
         ...state,
         error: action.message,
-        hasMore: !!action.payload,
+        hasMore: false,
         loaded: true,
         pending: false
       };

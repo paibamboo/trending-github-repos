@@ -20,7 +20,7 @@ export class LanguageHelper {
   }
 
   private static getSupportedLanguages(): string[] {
-    return ["en", "de"];
+    return ["en", "th"];
   }
 
   private static getTranslations(language: string): object {

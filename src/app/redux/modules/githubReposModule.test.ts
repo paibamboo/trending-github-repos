@@ -8,6 +8,7 @@ describe("githubReposModule", () => {
         error: "",
         githubRepos: [],
         hasMore: true,
+        loaded: false,
         page: 0,
         pending: false,
         perPage: 10
@@ -20,6 +21,7 @@ describe("githubReposModule", () => {
         error: "",
         githubRepos: [{description: "d", forksCount: 10, language: "Java", name: "n", stargazersCount: 2, id: 3}],
         hasMore: false,
+        loaded: true,
         page: 1,
         pending: false,
         perPage: 10
@@ -32,6 +34,7 @@ describe("githubReposModule", () => {
         error: "",
         githubRepos: [{description: "d", forksCount: 10, language: "Java", name: "n", stargazersCount: 2, id: 3}],
         hasMore: false,
+        loaded: true,
         page: 1,
         pending: false,
         perPage: 10
@@ -46,9 +49,10 @@ describe("githubReposModule", () => {
       const state: IGithubReposState = {
         error: "",
         githubRepos: [],
-        hasMore: false,
+        hasMore: true,
+        loaded: false,
         page: 0,
-        pending: false,
+        pending: true,
         perPage: 10
       };
       expect(githubReposReducer(state, searchGithubRepos.setFulfilled({
@@ -59,6 +63,7 @@ describe("githubReposModule", () => {
         ...state,
         githubRepos: [{description: "d", forksCount: 10, language: "Java", name: "n", stargazersCount: 2, id: 3}],
         hasMore: false,
+        loaded: true,
         page: 1,
         pending: false,
         perPage: 10
@@ -70,6 +75,7 @@ describe("githubReposModule", () => {
         error: "",
         githubRepos: [{description: "d", forksCount: 10, language: "Java", name: "n", stargazersCount: 2, id: 3}],
         hasMore: false,
+        loaded: true,
         page: 1,
         pending: false,
         perPage: 10
@@ -86,6 +92,7 @@ describe("githubReposModule", () => {
         error: "",
         githubRepos: [{description: "d", forksCount: 10, language: "Java", name: "n", stargazersCount: 2, id: 3}],
         hasMore: true,
+        loaded: true,
         page: 1,
         pending: false,
         perPage: 10

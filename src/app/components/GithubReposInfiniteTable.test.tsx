@@ -5,20 +5,22 @@ import {IGithubRepo} from "../models/GithubRepoInterfaces";
 import {GithubReposInfiniteTable, IGithubReposInfiniteTableTranslation} from "./GithubReposInfiniteTable";
 import {InfiniteTable} from "./InfiniteTable";
 
-describe("GithubReposInfiniteTable", () => {
+describe("<GithubReposInfiniteTable/>", () => {
+  const translation: IGithubReposInfiniteTableTranslation = {
+    description: "description",
+    forksCount: "forksCount",
+    id: "id",
+    language: "language",
+    name: "name",
+    stargazersCount: "stargazersCount"
+  };
+
   it("passes translation to column.title", () => {
-    const translation: IGithubReposInfiniteTableTranslation = {
-      description: "description",
-      forksCount: "forksCount",
-      id: "id",
-      language: "language",
-      name: "name",
-      stargazersCount: "stargazersCount"
-    };
     const wrapper = shallow(
       <GithubReposInfiniteTable
         hasMore={true}
         onLoadMore={jest.fn()}
+        rowMinHeight={100}
         translation={translation}
       />
     );
@@ -30,5 +32,18 @@ describe("GithubReposInfiniteTable", () => {
         fail(`The column title: ${title} is not in translation prop`);
       }
     });
+  });
+
+  it("sets minHeight to first column", () => {
+    const wrapper = shallow(
+      <GithubReposInfiniteTable
+        hasMore={true}
+        onLoadMore={jest.fn()}
+        rowMinHeight={100}
+        translation={translation}
+      />
+    );
+    const columns: ColumnProps<IGithubRepo>[] = wrapper.find(InfiniteTable).prop("columns");
+    expect((columns[0].render("First", null, 0) as any).props.style.minHeight).toBe(100);
   });
 });

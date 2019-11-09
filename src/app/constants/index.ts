@@ -1,3 +1,2 @@
-// easier import for doc
-export {Color} from "./Color";
+// tslint:disable:export-name
 export {FontSize} from "./FontSize";

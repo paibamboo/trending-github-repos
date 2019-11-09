@@ -2,15 +2,15 @@ import {ActionType, getType} from "typesafe-actions";
 import {IBaseState} from "./baseModule";
 import * as settingsActionCreators from "./settingsActionCreators";
 
-export type TLanguage = "en" | "de";
+export type Language = "en" | "th";
 
 export interface ITranslations {
   [key: string]: string;
 }
 
 export interface ISettingsState extends IBaseState {
-  language: TLanguage;
-  translations: ITranslations;
+  language: Language;
+  translation: ITranslations;
 }
 
 const initialState: ISettingsState = {
@@ -18,7 +18,7 @@ const initialState: ISettingsState = {
   language: "en",
   loaded: false,
   pending: false,
-  translations: {}
+  translation: {}
 };
 
 export function settingsReducer(
@@ -42,7 +42,7 @@ export function settingsReducer(
         error: "",
         loaded: true,
         pending: false,
-        translations: action.payload
+        translation: action.payload
       };
     case getType(settingsActionCreators.setLanguage.setRejected):
       return {

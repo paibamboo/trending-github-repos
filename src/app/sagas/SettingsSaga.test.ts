@@ -8,7 +8,7 @@ import {SettingsSaga} from "./SettingsSaga";
 
 describe("SettingsSaga", () => {
   describe("fetchTranslations", () => {
-    it("gets translations and sets fulfilled", () => {
+    it("gets translation and sets fulfilled", () => {
       expect.assertions(1);
       const dispatched = [];
       (dummyApi as any).getTranslations.mockResolvedValue({"Translation Key": "Translation Value"});

@@ -4,7 +4,7 @@ import {shallow} from "enzyme";
 import * as React from "react";
 import {InfiniteTable} from "./InfiniteTable";
 
-describe("InfiniteTable", () => {
+describe("<InfiniteTable/>", () => {
   it("passes debounce props to InfiniteScroll", () => {
     const wrapper = shallow(
       <InfiniteTable debounce={99} hasMore={true} loading={false} onLoadMore={jest.fn()} threshold={55}/>

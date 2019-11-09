@@ -1,7 +1,7 @@
 import {IGithubRepo} from "../../models/GithubRepoInterfaces";
 import {createAsyncActions} from "./baseModule";
 
-export interface ISearchGithubReposPayload {
+export interface ISearchGithubReposParams {
   order: "desc" | "asc";
   page: number;
   perPage: number;
@@ -9,10 +9,14 @@ export interface ISearchGithubReposPayload {
   sort: "stars" | "forks" | "help-wanted-issues" | "updated";
 }
 
-export interface ISearchGithubReposFulfilled {
+export interface ISearchGithubReposPayload {
   githubRepos: IGithubRepo[];
   hasMore: boolean;
   page: number;
+}
+
+export interface ISearchGithubReposRejectedPayload {
+  hasMore: boolean;
 }
 
 // tslint:disable-next-line:export-name
@@ -21,4 +25,4 @@ export const searchGithubRepos = createAsyncActions(
   "GITHUB_REPOS/SEARCH_GITHUB_REPOS_PENDING",
   "GITHUB_REPOS/SEARCH_GITHUB_REPOS_FULFILLED",
   "GITHUB_REPOS/SEARCH_GITHUB_REPOS_REJECTED"
-)<ISearchGithubReposPayload, null, ISearchGithubReposFulfilled, null>();
+)<ISearchGithubReposParams, null, ISearchGithubReposPayload, ISearchGithubReposRejectedPayload>();

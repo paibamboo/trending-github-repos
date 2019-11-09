@@ -13,6 +13,7 @@ import {HomePage} from "../pages/HomePage";
 import {IStore} from "../redux/IStore";
 import {RoutePageMap} from "../routes/routes";
 import {translationsSelector} from "../selectors/translationsSelector";
+import {ErrorModalContainer} from "./ErrorModalContainer";
 
 setupCss();
 
@@ -42,6 +43,7 @@ class App extends React.Component<IStateToProps> {
       <section className={classNames.container}>
         <Helmet {...appConfig.app.head}/>
         {segment && this.components[segment] ? React.createElement(this.components[segment]) : <div>{notFound}</div>}
+        <ErrorModalContainer/>
       </section>
     );
   }

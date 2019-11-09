@@ -19,7 +19,7 @@ export class GithubReposSaga extends BaseSaga {
         this.octokit.search.repos,
         snakenKeys({...action.payload, page: action.payload.page + 1}) as SearchReposParams
       );
-      const currentGithubRepos: IGithubRepo[] = yield select((store: IStore) => store.githubRepos);
+      const currentGithubRepos: IGithubRepo[] = yield select((store: IStore) => store.githubRepos.githubRepos);
       yield put(searchGithubRepos.setFulfilled({
         githubRepos: [...currentGithubRepos, ...(res.data.items.map((item) => camelizeKeys(item)) as IGithubRepo[])],
         hasMore: res.data.items.length === action.payload.perPage,

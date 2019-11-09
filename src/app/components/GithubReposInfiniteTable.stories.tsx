@@ -44,6 +44,7 @@ export const Simple = ({setState, state, mockedTranslation}) => (
       }
     }}
     rowKey={"id"}
+    rowMinHeight={100}
     translation={mockedTranslation}
   />
 );

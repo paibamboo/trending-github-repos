@@ -39,7 +39,7 @@ app.use(favicon(path.join(__dirname, "public/favicon.ico")));
 
 app.use("/public", express.static(path.join(__dirname, "public")));
 
-app.get("/translations/:language", (req: express.Request, res: express.Response) => {
+app.get("/translation/:language", (req: express.Request, res: express.Response) => {
   const languageHelper = new LanguageHelper(req.params.language);
   res.json(languageHelper.getTranslations());
 });
@@ -74,7 +74,7 @@ app.get("*", (req: express.Request, res: express.Response) => {
         language: "en",
         loaded: true,
         pending: false,
-        translations: languageHelper.getTranslations()
+        translation: languageHelper.getTranslations()
       }
     });
 

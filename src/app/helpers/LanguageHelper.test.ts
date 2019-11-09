@@ -3,7 +3,7 @@ import {IFS} from "../../../__mocks__/.fs";
 jest.mock("fs");
 import {LanguageHelper} from "./LanguageHelper";
 
-const languages: string[] = ["en, en", "en-GB, en;q=0.7", "de"];
+const languages: string[] = ["en, en", "en-GB, en;q=0.7", "th"];
 
 describe("LanguageHelper", () => {
 
@@ -28,9 +28,9 @@ describe("LanguageHelper", () => {
   });
 
   describe("isSupported()", () => {
-    it("returns true for en and de", () => {
+    it("returns true for en and th", () => {
       expect(LanguageHelper.isSupported("en")).toBeTruthy();
-      expect(LanguageHelper.isSupported("de")).toBeTruthy();
+      expect(LanguageHelper.isSupported("th")).toBeTruthy();
       expect(LanguageHelper.isSupported("blah")).toBeFalsy();
     });
   });
@@ -43,9 +43,9 @@ describe("LanguageHelper", () => {
     });
 
     it("returns settings data object for valid requested settings", () => {
-      const languageHelper = new LanguageHelper("de");
-      fs.__setFileContents("de.json", JSON.stringify({hello: "hallo"}));
-      expect(languageHelper.getTranslations()).toEqual({hello: "hallo"});
+      const languageHelper = new LanguageHelper("th");
+      fs.__setFileContents("th.json", JSON.stringify({hello: "สวัสดี"}));
+      expect(languageHelper.getTranslations()).toEqual({hello: "สวัสดี"});
     });
 
     it("returns default settings data object for invalid requested settings", () => {

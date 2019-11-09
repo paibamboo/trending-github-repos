@@ -3,7 +3,7 @@ import {IGithubRepo} from "../../models/GithubRepoInterfaces";
 import {IBaseState} from "./baseModule";
 import * as githubReposActionCreators from "./githubReposActionCreators";
 
-export interface IGithubReposState extends Omit<IBaseState, "loaded"> {
+export interface IGithubReposState extends IBaseState {
   githubRepos: IGithubRepo[];
   hasMore: boolean;
   page: number;
@@ -14,6 +14,7 @@ const initialState: IGithubReposState = {
   error: "",
   githubRepos: [],
   hasMore: true,
+  loaded: false,
   page: 0,
   pending: false,
   perPage: 10
@@ -34,6 +35,7 @@ export function githubReposReducer(
         ...state,
         githubRepos: action.payload.githubRepos,
         hasMore: action.payload.hasMore,
+        loaded: true,
         page: action.payload.page,
         pending: false
       };
@@ -41,6 +43,8 @@ export function githubReposReducer(
       return {
         ...state,
         error: action.message,
+        hasMore: !!action.payload,
+        loaded: true,
         pending: false
       };
     default:

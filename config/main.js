@@ -17,7 +17,7 @@ const config = {
         {name: 'viewport', content: 'width=device-width, initial-scale=1'},
         {name: 'description', content: 'React Redux Typescript'},
       ],
-      title: 'Crazy Factory'
+      title: 'Github Trending Repos'
     }
   },
   env: process.env.NODE_ENV || 'development',

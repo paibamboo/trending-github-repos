@@ -1,5 +1,4 @@
 import {cssRaw} from "typestyle";
-import {Color} from "../constants/Color";
 import {FontSize} from "../constants/FontSize";
 
 export function setupCss(): void {
@@ -30,16 +29,7 @@ export function setupCss(): void {
   }
 
   a {
-    color: ${Color.BLACK};
     text-decoration: none;
-  }
-
-  a:active, a:visited {
-    color: ${Color.BLUE};
-  }
-
-  :focus {
-    outline-color: ${Color.BLUE};
   }
 
   input, textarea, select, button {

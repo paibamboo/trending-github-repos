@@ -9,7 +9,7 @@ describe("settingsModule", () => {
         language: "en",
         loaded: false,
         pending: false,
-        translations: {}
+        translation: {}
       };
       expect(settingsReducer(undefined, {type: undefined})).toEqual(initialState);
     });
@@ -20,11 +20,11 @@ describe("settingsModule", () => {
         language: "en",
         loaded: false,
         pending: false,
-        translations: {}
+        translation: {}
       };
-      expect(settingsReducer(state, setLanguage.invoke("de"))).toEqual({
+      expect(settingsReducer(state, setLanguage.invoke("th"))).toEqual({
         error: "",
-        language: "de",
+        language: "th",
         loaded: false,
         pending: false,
         translations: {}
@@ -37,7 +37,7 @@ describe("settingsModule", () => {
         language: "en",
         loaded: false,
         pending: false,
-        translations: {}
+        translation: {}
       };
       expect(settingsReducer(state, setLanguage.setPending(null))).toEqual({
         error: "",
@@ -51,14 +51,14 @@ describe("settingsModule", () => {
     it("handles fulfilled action", () => {
       const state: ISettingsState = {
         error: "",
-        language: "de",
+        language: "th",
         loaded: false,
         pending: true,
-        translations: {}
+        translation: {}
       };
       expect(settingsReducer(state, setLanguage.setFulfilled({Hello: "Hallo"}))).toEqual({
         error: "",
-        language: "de",
+        language: "th",
         loaded: true,
         pending: false,
         translations: {Hello: "Hallo"}
@@ -68,14 +68,14 @@ describe("settingsModule", () => {
     it("handles rejected action", () => {
       const state: ISettingsState = {
         error: "",
-        language: "de",
+        language: "th",
         loaded: false,
         pending: true,
-        translations: {}
+        translation: {}
       };
       expect(settingsReducer(state, setLanguage.setRejected(null, "Error"))).toEqual({
         error: "Error",
-        language: "de",
+        language: "th",
         loaded: true,
         pending: false,
         translations: {}
@@ -88,7 +88,7 @@ describe("settingsModule", () => {
         language: "en",
         loaded: false,
         pending: false,
-        translations: {Hello: "Hallo"}
+        translation: {Hello: "Hallo"}
       };
       expect(settingsReducer(state, {type: "unknown"} as any)).toBe(state);
     });

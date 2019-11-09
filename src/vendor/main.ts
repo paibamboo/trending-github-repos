@@ -5,5 +5,3 @@
  * Example:
  * require('./bootstrap/css/bootstrap.min.css');
  */
-
-import "./dummy.css";

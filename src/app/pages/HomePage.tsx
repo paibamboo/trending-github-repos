@@ -1,37 +1,67 @@
+import autobind from "autobind-decorator";
 import * as React from "react";
 import {connect} from "react-redux";
+import {Dispatch} from "redux";
 import {createSelector} from "reselect";
-import {stylesheet} from "typestyle";
-import {Color} from "../constants/Color";
+import {GithubReposInfiniteTable, IGithubReposInfiniteTableTranslation} from "../components/GithubReposInfiniteTable";
 import {Translator} from "../models/Translator";
 import {ITranslator} from "../models/TranslatorInterfaces";
 import {IStore} from "../redux/IStore";
+import {
+  ISearchGithubReposParams,
+  searchGithubRepos as searchGithubReposActionCreator
+} from "../redux/modules/githubReposActionCreators";
+import {IGithubReposState} from "../redux/modules/githubReposModule";
 import {translationsSelector} from "../selectors/translationsSelector";
 
-const classNames = stylesheet({
-  container: {
-    color: Color.BLUE,
-    textAlign: "center"
-  }
-});
-
-interface IStateToProps {
-  translations: {
-    hello: string;
-  };
+interface IStateProps extends IGithubReposState {
+  translation: IGithubReposInfiniteTableTranslation;
 }
 
-class HomePage extends React.Component<IStateToProps> {
+interface IDispatchProps {
+  searchGithubRepos: (params: ISearchGithubReposParams) => void;
+}
+
+type Props = IStateProps & IDispatchProps;
+
+class HomePage extends React.Component<Props> {
+  private readonly thirtyDaysAgo: string;
+
+  constructor(props: Props) {
+    super(props);
+    const date = new Date();
+    date.setDate(date.getDate() - 30);
+    this.thirtyDaysAgo = date.toISOString().split("T")[0];
+    if (!props.loaded) {
+      this.handleLoadMore();
+    }
+  }
+
   public render(): JSX.Element {
-    const {translations} = this.props;
+    const {githubRepos, hasMore, pending, translation} = this.props;
     return (
-      <div className={classNames.container}>
-        <a href={"https://www.crazy-factory.com"}>
-          <img alt={"barbar"} src={require("../images/crazy.png")}/>
-        </a>
-        <p>{translations.hello}</p>
-      </div>
+      <GithubReposInfiniteTable
+        dataSource={githubRepos}
+        hasMore={hasMore}
+        loading={pending}
+        onLoadMore={this.handleLoadMore}
+        rowKey={"id"}
+        rowMinHeight={window.innerHeight / 10}
+        translation={translation}
+      />
     );
+  }
+
+  @autobind
+  private handleLoadMore(): void {
+    const {page, perPage, searchGithubRepos} = this.props;
+    searchGithubRepos({
+      order: "desc",
+      page,
+      perPage,
+      q: `created:>=${this.thirtyDaysAgo}`,
+      sort: "stars"
+    });
   }
 }
 
@@ -40,16 +70,28 @@ const componentTranslationsSelector = createSelector(
   (translations) => {
     const translator: ITranslator = new Translator(translations);
     return {
-      hello: translator.translate("Hello")
+      description: translator.translate("Description"),
+      forksCount: translator.translate("Forks count"),
+      id: translator.translate("Id"),
+      language: translator.translate("Language"),
+      name: translator.translate("Name"),
+      stargazersCount: translator.translate("Stars count")
     };
   }
 );
 
-function mapStateToProps(state: Pick<IStore, "settings">): IStateToProps {
+function mapStateToProps(state: Pick<IStore, "githubRepos" | "settings">): IStateProps {
   return {
-    translations: componentTranslationsSelector(state)
+    ...state.githubRepos,
+    translation: componentTranslationsSelector(state)
   };
 }
 
-const connected = connect(mapStateToProps)(HomePage);
-export {connected as HomePage, HomePage as UnconnectedHomePage, mapStateToProps};
+function mapDispatchToProps(dispatch: Dispatch): IDispatchProps {
+  return {
+    searchGithubRepos: (params) => dispatch(searchGithubReposActionCreator.invoke(params))
+  };
+}
+
+const connected = connect(mapStateToProps, mapDispatchToProps)(HomePage);
+export {connected as HomePage, HomePage as UnconnectedHomePage, mapStateToProps, mapDispatchToProps};

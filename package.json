@@ -62,6 +62,7 @@
     "@babel/preset-typescript": "^7.7.2",
     "@commitlint/cli": "^8.2.0",
     "@commitlint/config-conventional": "^8.2.0",
+    "@crazyfactory/storybook-props-mock-addon": "^1.1.1",
     "@crazyfactory/tslint-rules": "^1.9.0",
     "@storybook/addon-docs": "^5.3.0-alpha.3",
     "@storybook/react": "^5.2.1",

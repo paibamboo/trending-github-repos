@@ -39,10 +39,8 @@ export const Simple = ({setState, state}) => (
         );
       }
     }}
-  >
-    {state.items.map((item) => <div key={item}>{item}</div>)}
-    {state.loading && <div>Loading...</div>}
-  </InfiniteTable>
+    rowKey={"columnA"}
+  />
 );
 
 Simple.story = {

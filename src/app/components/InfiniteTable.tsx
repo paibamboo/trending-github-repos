@@ -6,7 +6,7 @@ import {Table} from "antd";
 import {TableProps} from "antd/lib/table";
 import * as React from "react";
 
-type InfiniteTableProps<T> = Omit<TableProps<T>, "pagination"> & Omit<InfiniteScrollProps, "isLoading">;
+export type InfiniteTableProps<T> = Omit<TableProps<T>, "pagination"> & Omit<InfiniteScrollProps, "isLoading">;
 
 export class InfiniteTable<T> extends React.Component<InfiniteTableProps<T>> {
   public render(): JSX.Element {

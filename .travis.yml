@@ -29,7 +29,8 @@ after_script: greenkeeper-lockfile-upload
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
-  - mkdir ./gh-pages && mkdir ./gh-pages/web && mkdir ./gh-pages/storybook
-  - cp -r ./storybook ./gh-pages/storybook && cp -r ./build ./gh-pages/web
+  - mkdir ./gh-pages
+  - cp -r ./storybook ./gh-pages && cp -r ./build ./gh-pages
+  - mv ./gh-pages/build ./gh-pages/web
   - npm i gh-pages
   - node ./buildGithubPages.js

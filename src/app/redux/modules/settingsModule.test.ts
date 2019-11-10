@@ -27,7 +27,7 @@ describe("settingsModule", () => {
         language: "th",
         loaded: false,
         pending: false,
-        translations: {}
+        translation: {}
       });
     });
 
@@ -44,7 +44,7 @@ describe("settingsModule", () => {
         language: "en",
         loaded: false,
         pending: true,
-        translations: {}
+        translation: {}
       });
     });
 
@@ -61,7 +61,7 @@ describe("settingsModule", () => {
         language: "th",
         loaded: true,
         pending: false,
-        translations: {Hello: "Hallo"}
+        translation: {Hello: "Hallo"}
       });
     });
 
@@ -78,7 +78,7 @@ describe("settingsModule", () => {
         language: "th",
         loaded: true,
         pending: false,
-        translations: {}
+        translation: {}
       });
     });
 

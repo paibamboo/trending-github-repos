@@ -15,7 +15,7 @@ const config = {
         {charset: 'utf-8'},
         {'http-equiv': 'x-ua-compatible', content: 'ie=edge'},
         {name: 'viewport', content: 'width=device-width, initial-scale=1'},
-        {name: 'description', content: 'React Redux Typescript'},
+        {name: 'description', content: 'Github Trending Repos'},
       ],
       title: 'Github Trending Repos'
     }

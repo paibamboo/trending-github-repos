@@ -1,6 +1,6 @@
 {
-  "name": "ts-react-boilerplate",
-  "description": "A universal boilerplate for building web applications w/ TypeScript, React, Redux and more.",
+  "name": "trending-github-repos",
+  "description": "List of trending Github repos",
   "main": "build/server.js",
   "husky": {
     "hooks": {
@@ -27,14 +27,14 @@
     "lint:fix": "npm run lint -s -- --fix",
     "doc": "start-storybook -p 6060"
   },
-  "author": "Crazy Factory <dev@crazy-factory.com>",
-  "homepage": "https://github.com/crazyfactory/ts-react-boilerplate.git",
+  "author": "paibamboo",
+  "homepage": "https://github.com/paibamboo/trending-github-repos",
   "repository": {
     "type": "git",
-    "url": "https://github.com/crazyfactory/ts-react-boilerplate.git"
+    "url": "https://github.com/paibamboo/trending-github-repos.git"
   },
   "bugs": {
-    "url": "https://github.com/crazyfactory/ts-react-boilerplate/issues"
+    "url": "https://github.com/paibamboo/trending-github-repos/issues"
   },
   "keywords": [
     "react",

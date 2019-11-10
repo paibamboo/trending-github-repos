@@ -1,18 +1,24 @@
+jest.mock("./dummyApi");
 import {runSaga} from "redux-saga";
 import * as ReduxSagaEffects from "redux-saga/effects";
 import {getType} from "typesafe-actions";
 import {searchGithubRepos} from "../redux/modules/githubReposActionCreators";
+import {dummyApi} from "./dummyApi";
 import {GithubReposSaga} from "./GithubReposSaga";
 
 describe("GithubReposSaga", () => {
+  beforeEach(() => {
+    global.process.env.BROWSER = "true";
+  });
+
   describe("fetchGithubRepos", () => {
-    it("gets githubRepos, increments page by 1, and sets hasMore to true", () => {
+    it("gets and concats githubRepos, and sets hasMore to true", () => {
       expect.assertions(1);
       const dispatched = [];
-      const originalItems = Array.from({length: 10}, (_, i) => (
+      const originalItems = Array.from({length: 2}, (_, i) => (
         {description: "d", forksCount: i, id: i, language: "Python", name: "n", stargazersCount: i}
       ));
-      const newItems = Array.from({length: 10}, (_, i) => (
+      const newItems = Array.from({length: 2}, (_, i) => (
         {description: "d", forksCount: i + 10, id: i + 10, language: "Python", name: "n", stargazersCount: i + 10}
       ));
       const octokitMock = {
@@ -23,11 +29,11 @@ describe("GithubReposSaga", () => {
       return runSaga(
         {
           dispatch: (action) => dispatched.push(action),
-          getState: () => ({githubRepos: originalItems})
+          getState: () => ({githubRepos: {githubRepos: originalItems}})
         },
         (new GithubReposSaga(octokitMock as any)).fetchGithubRepos,
         {
-          payload: {order: "desc", page: 0, perPage: 10, q: "created:>2019-01-01", sort: "stars"},
+          payload: {order: "desc", page: 2, perPage: 2, q: "created:>2019-01-01", sort: "stars"},
           type: "GITHUB_REPOS/SEARCH_GITHUB_REPOS"
         }
       ).toPromise().then(() => {
@@ -37,7 +43,8 @@ describe("GithubReposSaga", () => {
             payload: {
               githubRepos: [...originalItems, ...newItems],
               hasMore: true,
-              page: 1
+              page: 2,
+              perPage: 2
             },
             type: "GITHUB_REPOS/SEARCH_GITHUB_REPOS_FULFILLED"
           }
@@ -45,13 +52,13 @@ describe("GithubReposSaga", () => {
       });
     });
 
-    it("gets githubRepos, increments page by 1, and sets hasMore to false", () => {
+    it("gets and concats githubRepos, and sets hasMore to false", () => {
       expect.assertions(1);
       const dispatched = [];
-      const originalItems = Array.from({length: 10}, (_, i) => (
+      const originalItems = Array.from({length: 2}, (_, i) => (
         {description: "d", forksCount: i, id: i, language: "Python", name: "n", stargazersCount: i}
       ));
-      const newItems = Array.from({length: 9}, (_, i) => (
+      const newItems = Array.from({length: 1}, (_, i) => (
         {description: "d", forksCount: i + 10, id: i + 10, language: "Python", name: "n", stargazersCount: i + 10}
       ));
       const octokitMock = {
@@ -62,11 +69,11 @@ describe("GithubReposSaga", () => {
       return runSaga(
         {
           dispatch: (action) => dispatched.push(action),
-          getState: () => ({githubRepos: originalItems})
+          getState: () => ({githubRepos: {githubRepos: originalItems}})
         },
         (new GithubReposSaga(octokitMock as any)).fetchGithubRepos,
         {
-          payload: {order: "desc", page: 0, perPage: 10, q: "created:>2019-01-01", sort: "stars"},
+          payload: {order: "desc", page: 2, perPage: 2, q: "created:>2019-01-01", sort: "stars"},
           type: "GITHUB_REPOS/SEARCH_GITHUB_REPOS"
         }
       ).toPromise().then(() => {
@@ -76,7 +83,45 @@ describe("GithubReposSaga", () => {
             payload: {
               githubRepos: [...originalItems, ...newItems],
               hasMore: false,
-              page: 1
+              page: 2,
+              perPage: 2
+            },
+            type: "GITHUB_REPOS/SEARCH_GITHUB_REPOS_FULFILLED"
+          }
+        ]);
+      });
+    });
+
+    it("uses isormorphic fetch on server", () => {
+      delete global.process.env.BROWSER;
+      expect.assertions(1);
+      const dispatched = [];
+      const originalItems = Array.from({length: 2}, (_, i) => (
+        {description: "d", forksCount: i, id: i, language: "Python", name: "n", stargazersCount: i}
+      ));
+      const newItems = Array.from({length: 1}, (_, i) => (
+        {description: "d", forksCount: i + 10, id: i + 10, language: "Python", name: "n", stargazersCount: i + 10}
+      ));
+      (dummyApi as any).searchGithubRepos.mockResolvedValue({data: {items: newItems}});
+      return runSaga(
+        {
+          dispatch: (action) => dispatched.push(action),
+          getState: () => ({githubRepos: {githubRepos: originalItems}})
+        },
+        (new GithubReposSaga(null)).fetchGithubRepos,
+        {
+          payload: {order: "desc", page: 2, perPage: 2, q: "created:>2019-01-01", sort: "stars"},
+          type: "GITHUB_REPOS/SEARCH_GITHUB_REPOS"
+        }
+      ).toPromise().then(() => {
+        expect(dispatched).toEqual([
+          {payload: null, type: "GITHUB_REPOS/SEARCH_GITHUB_REPOS_PENDING"},
+          {
+            payload: {
+              githubRepos: [...originalItems, ...newItems],
+              hasMore: false,
+              page: 2,
+              perPage: 2
             },
             type: "GITHUB_REPOS/SEARCH_GITHUB_REPOS_FULFILLED"
           }
@@ -89,7 +134,7 @@ describe("GithubReposSaga", () => {
       const dispatched = [];
       const octokitMock = {
         search: {
-          repos: () => new Promise((_, rejected) => rejected(new Error("Error!")))
+          repos: () => new Promise((_, reject) => reject({message: "Not authorized", status: 400}))
         }
       };
       return runSaga(
@@ -105,9 +150,34 @@ describe("GithubReposSaga", () => {
       ).toPromise().then(() => {
         expect(dispatched).toEqual([
           {payload: null, type: "GITHUB_REPOS/SEARCH_GITHUB_REPOS_PENDING"},
-          {message: "Error!", payload: null, type: "GITHUB_REPOS/SEARCH_GITHUB_REPOS_REJECTED"}
+          {
+            message: "Not authorized",
+            payload: {openErrorModal: true},
+            type: "GITHUB_REPOS/SEARCH_GITHUB_REPOS_REJECTED"
+          }
         ]);
       });
+    });
+
+    it("throw if error contains no status code", () => {
+      expect.assertions(1);
+      const dispatched = [];
+      const octokitMock = {
+        search: {
+          repos: () => new Promise((_, reject) => reject({message: "Some javascript error"}))
+        }
+      };
+      return runSaga(
+        {
+          dispatch: (action) => dispatched.push(action),
+          getState: () => ({githubRepos: []})
+        },
+        (new GithubReposSaga(octokitMock as any)).fetchGithubRepos,
+        {
+          payload: {order: "desc", page: 0, perPage: 10, q: "created:>2019-01-01", sort: "stars"},
+          type: "GITHUB_REPOS/SEARCH_GITHUB_REPOS"
+        }
+      ).toPromise().catch((err) => expect(err).toEqual({message: "Some javascript error"}));
     });
   });
 

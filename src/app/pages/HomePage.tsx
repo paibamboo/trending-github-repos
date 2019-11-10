@@ -14,6 +14,11 @@ import {
 import {IGithubReposState} from "../redux/modules/githubReposModule";
 import {translationsSelector} from "../selectors/translationsSelector";
 
+export const INITIAL_PER_PAGE = 30;
+export const SUBSEQUENT_PER_PAGE = 10;
+export const FIRST_PAGE = 1;
+export const SECOND_PAGE = 4;
+
 export interface IHomePageTranslation extends IGithubReposInfiniteTableTranslation {
   emptyText: string;
 }
@@ -37,7 +42,7 @@ class HomePage extends React.Component<Props> {
     date.setDate(date.getDate() - 30);
     this.thirtyDaysAgo = date.toISOString().split("T")[0];
     if (!props.loaded) {
-      this.handleLoadMore();
+      this.handleLoadMore(FIRST_PAGE, INITIAL_PER_PAGE);
     }
   }
 
@@ -51,19 +56,22 @@ class HomePage extends React.Component<Props> {
         locale={translation}
         onLoadMore={this.handleLoadMore}
         rowKey={"id"}
-        rowMinHeight={window.innerHeight / 10}
         translation={translation}
       />
     );
   }
 
   @autobind
-  private handleLoadMore(): void {
-    const {page, perPage, searchGithubRepos} = this.props;
+  private handleLoadMore(page?: number, perPage?: number): void {
+    const {page: pageProps, searchGithubRepos} = this.props;
     searchGithubRepos({
       order: "desc",
-      page,
-      perPage,
+      page: typeof page !== "undefined"
+        ? page
+        : (pageProps === FIRST_PAGE ? SECOND_PAGE : pageProps + 1),
+      perPage: typeof perPage !== "undefined"
+        ? perPage
+        : SUBSEQUENT_PER_PAGE,
       q: `created:>=${this.thirtyDaysAgo}`,
       sort: "stars"
     });

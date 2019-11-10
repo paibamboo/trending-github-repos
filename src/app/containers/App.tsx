@@ -1,18 +1,16 @@
+import {CommonCss} from "@crazyfactory/frontend-commons";
+import {Spin} from "antd";
 import * as React from "react";
 import {Helmet} from "react-helmet";
 import {connect} from "react-redux";
 import {createRouteNodeSelector, RouterState} from "redux-router5";
-import {createSelector} from "reselect";
 import {State as IRouteState} from "router5";
-import {stylesheet} from "typestyle";
+import {classes, stylesheet} from "typestyle";
 import {config as appConfig} from "../../../config";
 import {setupCss} from "../helpers/setupCss";
-import {Translator} from "../models/Translator";
-import {ITranslator} from "../models/TranslatorInterfaces";
 import {HomePage} from "../pages/HomePage";
 import {IStore} from "../redux/IStore";
 import {RoutePageMap} from "../routes/routes";
-import {translationsSelector} from "../selectors/translationsSelector";
 import {ErrorModalContainer} from "./ErrorModalContainer";
 
 setupCss();
@@ -22,46 +20,54 @@ const classNames = stylesheet({
     margin: 0,
     padding: 0,
     textAlign: "center"
+  },
+  loadingContainer: {
+    paddingTop: 100
   }
 });
 
-interface IStateToProps {
+interface IStateProps {
+  loaded: boolean;
   route: IRouteState;
-  translations: {
-    notFound: string;
-  };
 }
 
-class App extends React.Component<IStateToProps> {
+class App extends React.Component<IStateProps> {
   private components: RoutePageMap = {
     homePage: HomePage
   };
   public render(): JSX.Element {
-    const {route, translations: {notFound}} = this.props;
+    const {loaded, route} = this.props;
+    if (!loaded) {
+      return (
+        <div className={classes(classNames.loadingContainer, CommonCss.textAlignCenter)}>
+          <Spin size={"large"}/>
+        </div>
+      );
+    }
+
     const segment = route ? route.name.split(".")[0] : undefined;
     return (
       <section className={classNames.container}>
         <Helmet {...appConfig.app.head}/>
-        {segment && this.components[segment] ? React.createElement(this.components[segment]) : <div>{notFound}</div>}
+        {renderComponentByRoute(this.components)}
         <ErrorModalContainer/>
       </section>
     );
+
+    function renderComponentByRoute(components: RoutePageMap): JSX.Element {
+      if (segment && components[segment]) {
+        return React.createElement(components[segment]);
+      }
+      return (
+        <div>404</div>
+      );
+    }
   }
 }
 
-const componentTranslationsSelector = createSelector(
-  translationsSelector,
-  (translations) => {
-    const translator: ITranslator = new Translator(translations);
-    return {
-      notFound: translator.translate("Not found")
-    };
-  }
-);
-
-const mapStateToProps = (state: Pick<IStore, "router" | "settings">): IStateToProps & Partial<RouterState> => ({
+const mapStateToProps = (state: Pick<IStore, "router" | "settings">): IStateProps & Partial<RouterState> => ({
   ...createRouteNodeSelector("")(state),
-  translations: componentTranslationsSelector(state)
+  loaded: state.settings.loaded
 });
 
 const connected = connect(mapStateToProps)(App);

@@ -9,6 +9,9 @@ export class Translator implements ITranslator {
   }
 
   public translate(key: string): string {
+    if (key === "") {
+      return "";
+    }
     if (this.translations[key]) {
       return this.translations[key];
     }

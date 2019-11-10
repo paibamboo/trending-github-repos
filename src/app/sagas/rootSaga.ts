@@ -4,9 +4,7 @@ import {GithubReposSaga} from "./GithubReposSaga";
 import {SettingsSaga} from "./SettingsSaga";
 
 export default function* rootSaga(): IterableIterator<AllEffect<any>> {
-  const octokit = new Octokit({
-    auth: localStorage.getItem("accessToken") || undefined
-  });
+  const octokit = new Octokit();
   yield all([
     (new GithubReposSaga(octokit)).watch(),
     (new SettingsSaga(octokit)).watch()

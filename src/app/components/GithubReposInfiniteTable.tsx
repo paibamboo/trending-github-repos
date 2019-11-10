@@ -1,14 +1,11 @@
-import {CommonCss} from "@crazyfactory/frontend-commons";
 import {ColumnProps} from "antd/lib/table";
 import * as React from "react";
-import {classes} from "typestyle";
 import {IGithubRepo} from "../models/GithubRepoInterfaces";
 import {InfiniteTable, InfiniteTableProps} from "./InfiniteTable";
 
 export type IGithubReposInfiniteTableTranslation = Record<keyof IGithubRepo, string>;
 
 export interface IGithubReposInfiniteTableProps extends Omit<InfiniteTableProps<IGithubRepo>, "columns"> {
-  rowMinHeight: number;
   translation: IGithubReposInfiniteTableTranslation;
 }
 
@@ -16,14 +13,6 @@ export class GithubReposInfiniteTable extends React.Component<IGithubReposInfini
   private columns: ColumnProps<IGithubRepo>[] = [
     {
       dataIndex: "name",
-      render: (name) => (
-        <div
-          className={classes(CommonCss.flex, CommonCss.alignItemsCenter)}
-          style={{minHeight: this.props.rowMinHeight}}
-        >
-          {name}
-        </div>
-      ),
       title: this.props.translation.name
     },
     {

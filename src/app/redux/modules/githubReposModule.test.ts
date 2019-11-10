@@ -11,7 +11,7 @@ describe("githubReposModule", () => {
         loaded: false,
         page: 0,
         pending: false,
-        perPage: 10
+        perPage: 0
       };
       expect(githubReposReducer(undefined, {type: undefined})).toEqual(initialState);
     });
@@ -53,12 +53,13 @@ describe("githubReposModule", () => {
         loaded: false,
         page: 0,
         pending: true,
-        perPage: 10
+        perPage: 0
       };
       expect(githubReposReducer(state, searchGithubRepos.setFulfilled({
         githubRepos: [{description: "d", forksCount: 10, language: "Java", name: "n", stargazersCount: 2, id: 3}],
         hasMore: false,
-        page: 1
+        page: 1,
+        perPage: 30
       }))).toEqual({
         ...state,
         githubRepos: [{description: "d", forksCount: 10, language: "Java", name: "n", stargazersCount: 2, id: 3}],
@@ -66,7 +67,7 @@ describe("githubReposModule", () => {
         loaded: true,
         page: 1,
         pending: false,
-        perPage: 10
+        perPage: 30
       });
     });
 

@@ -1,3 +1,4 @@
+import {Spin} from "antd";
 import {shallow} from "enzyme";
 import * as React from "react";
 import {State as IRouteState} from "router5";
@@ -25,7 +26,6 @@ describe("<App />", () => {
     pending: false,
     translation: {"Not found": "Not Found"}
   };
-  const translations = {notFound: "Not Found"};
 
   it("maps state to props correctly", () => {
     const props = mapStateToProps({
@@ -33,26 +33,30 @@ describe("<App />", () => {
       settings
     });
     expect(props.route).toEqual(route);
-    expect(props.translations).toEqual({notFound: "Not Found"});
   });
 
   it("renders with correct style", () => {
-    const wrapper = shallow(<UnconnectedApp route={route} translations={translations}/>);
+    const wrapper = shallow(<UnconnectedApp loaded={true} route={route}/>);
     expect(wrapper.find("section")).toHaveClassName(classNames.container);
   });
 
   it("renders HomePage", () => {
-    const wrapper = shallow(<UnconnectedApp route={route} translations={translations}/>);
+    const wrapper = shallow(<UnconnectedApp loaded={true} route={route}/>);
     expect(wrapper.find(HomePage).length).toBe(1);
   });
 
   it("renders Not Found when route is null", () => {
-    const wrapper = shallow(<UnconnectedApp route={null} translations={translations}/>);
-    expect(wrapper.find("div")).toHaveText("Not Found");
+    const wrapper = shallow(<UnconnectedApp loaded={true} route={null}/>);
+    expect(wrapper.find("div")).toHaveText("404");
   });
 
   it("renders Not Found when segment is undefined", () => {
-    const wrapper = shallow(<UnconnectedApp route={routeUnavailable} translations={translations}/>);
-    expect(wrapper.find("div")).toHaveText("Not Found");
+    const wrapper = shallow(<UnconnectedApp loaded={true} route={routeUnavailable}/>);
+    expect(wrapper.find("div")).toHaveText("404");
+  });
+
+  it("renders Spin if loaded is false", () => {
+    const wrapper = shallow(<UnconnectedApp loaded={false} route={routeUnavailable}/>);
+    expect(wrapper.find(Spin)).toHaveLength(1);
   });
 });

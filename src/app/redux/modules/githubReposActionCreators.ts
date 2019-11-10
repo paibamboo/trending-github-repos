@@ -13,6 +13,7 @@ export interface ISearchGithubReposPayload {
   githubRepos: IGithubRepo[];
   hasMore: boolean;
   page: number;
+  perPage: number;
 }
 
 export interface ISearchGithubReposRejectedPayload {

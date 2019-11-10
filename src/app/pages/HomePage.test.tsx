@@ -5,7 +5,16 @@ import {IGithubRepo} from "../models/GithubRepoInterfaces";
 import {IStore} from "../redux/IStore";
 import {ISearchGithubReposParams} from "../redux/modules/githubReposActionCreators";
 import {IGithubReposState} from "../redux/modules/githubReposModule";
-import {IHomePageTranslation, mapDispatchToProps, mapStateToProps, UnconnectedHomePage} from "./HomePage";
+import {
+  FIRST_PAGE,
+  IHomePageTranslation,
+  INITIAL_PER_PAGE,
+  mapDispatchToProps,
+  mapStateToProps,
+  SECOND_PAGE,
+  SUBSEQUENT_PER_PAGE,
+  UnconnectedHomePage
+} from "./HomePage";
 describe("<HomePage />", () => {
   const rawTranslation = {
     "Description": "Description",
@@ -13,6 +22,7 @@ describe("<HomePage />", () => {
     "Id": "Id",
     "Language": "Language",
     "Name": "Name",
+    "No data": "No data",
     "Stars count": "Stars count"
   };
   const translation: IHomePageTranslation = {
@@ -24,7 +34,9 @@ describe("<HomePage />", () => {
     name: "Name",
     stargazersCount: "Stars count"
   };
-
+  const date = new Date();
+  date.setDate(date.getDate() - 30);
+  const thirtyDaysAgo = date.toISOString().split("T")[0];
   const githubRepos: IGithubRepo[] = [
     {description: "d", forksCount: 5, id: 1, language: "Rust", name: "n", stargazersCount: 10}
   ];
@@ -94,7 +106,57 @@ describe("<HomePage />", () => {
     expect(wrapper.find(GithubReposInfiniteTable)).toHaveProp("translation", translation);
   });
 
-  it("calls searchGithubRepos on load more", () => {
+  it("loads github repos with FIRST_PAGE and INITIAL_PER_PAGE params once rendered", () => {
+    const searchGithubRepos = jest.fn();
+    shallow(
+      <UnconnectedHomePage
+        error={""}
+        githubRepos={githubRepos}
+        hasMore={false}
+        loaded={false}
+        page={0}
+        pending={false}
+        perPage={0}
+        searchGithubRepos={searchGithubRepos}
+        translation={translation}
+      />
+    );
+    expect(searchGithubRepos).toHaveBeenCalledWith({
+      order: "desc",
+      page: FIRST_PAGE,
+      perPage: INITIAL_PER_PAGE,
+      q: `created:>=${thirtyDaysAgo}`,
+      sort: "stars"
+    });
+  });
+
+  it("loads github repos with SECOND_PAGE and SUBSEQUENT_PER_PAGE params on second render", () => {
+    const searchGithubRepos = jest.fn();
+    const wrapper = shallow(
+      <UnconnectedHomePage
+        error={""}
+        githubRepos={githubRepos}
+        hasMore={false}
+        loaded={true}
+        page={FIRST_PAGE}
+        pending={false}
+        perPage={INITIAL_PER_PAGE}
+        searchGithubRepos={searchGithubRepos}
+        translation={translation}
+      />
+    );
+    expect(searchGithubRepos).not.toHaveBeenCalled();
+    wrapper.find(GithubReposInfiniteTable).simulate("loadMore");
+    expect(searchGithubRepos).toHaveBeenCalledWith({
+      order: "desc",
+      page: SECOND_PAGE,
+      perPage: SUBSEQUENT_PER_PAGE,
+      q: `created:>=${thirtyDaysAgo}`,
+      sort: "stars"
+    });
+  });
+
+  it("loads github repos with page prop plus 1 and SUBSEQUENT_PER_PAGE params on other renders", () => {
     const searchGithubRepos = jest.fn();
     const wrapper = shallow(
       <UnconnectedHomePage
@@ -104,40 +166,19 @@ describe("<HomePage />", () => {
         loaded={true}
         page={5}
         pending={false}
-        perPage={5}
+        perPage={INITIAL_PER_PAGE}
         searchGithubRepos={searchGithubRepos}
         translation={translation}
       />
     );
-    const date = new Date();
-    date.setDate(date.getDate() - 30);
-    const thirtyDaysAgo = date.toISOString().split("T")[0];
     expect(searchGithubRepos).not.toHaveBeenCalled();
     wrapper.find(GithubReposInfiniteTable).simulate("loadMore");
     expect(searchGithubRepos).toHaveBeenCalledWith({
       order: "desc",
-      page: 5,
-      perPage: 5,
+      page: 6,
+      perPage: SUBSEQUENT_PER_PAGE,
       q: `created:>=${thirtyDaysAgo}`,
       sort: "stars"
     });
-  });
-
-  it("calls searchGithubRepos once rendered when loaded is false", () => {
-    const shouldBeCalled = jest.fn();
-    shallow(
-      <UnconnectedHomePage
-        error={""}
-        githubRepos={githubRepos}
-        hasMore={false}
-        loaded={false}
-        page={5}
-        pending={false}
-        perPage={5}
-        searchGithubRepos={shouldBeCalled}
-        translation={translation}
-      />
-    );
-    expect(shouldBeCalled).toHaveBeenCalled();
   });
 });

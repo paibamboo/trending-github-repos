@@ -34,11 +34,11 @@ describe("GithubReposSaga", () => {
         (new GithubReposSaga(octokitMock as any)).fetchGithubRepos,
         {
           payload: {order: "desc", page: 2, perPage: 2, q: "created:>2019-01-01", sort: "stars"},
-          type: "GITHUB_REPOS/SEARCH_GITHUB_REPOS"
+          type: getType(searchGithubRepos.invoke)
         }
       ).toPromise().then(() => {
         expect(dispatched).toEqual([
-          {payload: null, type: "GITHUB_REPOS/SEARCH_GITHUB_REPOS_PENDING"},
+          {payload: null, type: getType(searchGithubRepos.setPending)},
           {
             payload: {
               githubRepos: [...originalItems, ...newItems],
@@ -46,7 +46,7 @@ describe("GithubReposSaga", () => {
               page: 2,
               perPage: 2
             },
-            type: "GITHUB_REPOS/SEARCH_GITHUB_REPOS_FULFILLED"
+            type: getType(searchGithubRepos.setFulfilled)
           }
         ]);
       });
@@ -74,11 +74,11 @@ describe("GithubReposSaga", () => {
         (new GithubReposSaga(octokitMock as any)).fetchGithubRepos,
         {
           payload: {order: "desc", page: 2, perPage: 2, q: "created:>2019-01-01", sort: "stars"},
-          type: "GITHUB_REPOS/SEARCH_GITHUB_REPOS"
+          type: getType(searchGithubRepos.invoke)
         }
       ).toPromise().then(() => {
         expect(dispatched).toEqual([
-          {payload: null, type: "GITHUB_REPOS/SEARCH_GITHUB_REPOS_PENDING"},
+          {payload: null, type: getType(searchGithubRepos.setPending)},
           {
             payload: {
               githubRepos: [...originalItems, ...newItems],
@@ -86,7 +86,7 @@ describe("GithubReposSaga", () => {
               page: 2,
               perPage: 2
             },
-            type: "GITHUB_REPOS/SEARCH_GITHUB_REPOS_FULFILLED"
+            type: getType(searchGithubRepos.setFulfilled)
           }
         ]);
       });
@@ -111,11 +111,11 @@ describe("GithubReposSaga", () => {
         (new GithubReposSaga(null)).fetchGithubRepos,
         {
           payload: {order: "desc", page: 2, perPage: 2, q: "created:>2019-01-01", sort: "stars"},
-          type: "GITHUB_REPOS/SEARCH_GITHUB_REPOS"
+          type: getType(searchGithubRepos.invoke)
         }
       ).toPromise().then(() => {
         expect(dispatched).toEqual([
-          {payload: null, type: "GITHUB_REPOS/SEARCH_GITHUB_REPOS_PENDING"},
+          {payload: null, type: getType(searchGithubRepos.setPending)},
           {
             payload: {
               githubRepos: [...originalItems, ...newItems],
@@ -123,7 +123,7 @@ describe("GithubReposSaga", () => {
               page: 2,
               perPage: 2
             },
-            type: "GITHUB_REPOS/SEARCH_GITHUB_REPOS_FULFILLED"
+            type: getType(searchGithubRepos.setFulfilled)
           }
         ]);
       });
@@ -145,15 +145,15 @@ describe("GithubReposSaga", () => {
         (new GithubReposSaga(octokitMock as any)).fetchGithubRepos,
         {
           payload: {order: "desc", page: 0, perPage: 10, q: "created:>2019-01-01", sort: "stars"},
-          type: "GITHUB_REPOS/SEARCH_GITHUB_REPOS"
+          type: getType(searchGithubRepos.invoke)
         }
       ).toPromise().then(() => {
         expect(dispatched).toEqual([
-          {payload: null, type: "GITHUB_REPOS/SEARCH_GITHUB_REPOS_PENDING"},
+          {payload: null, type: getType(searchGithubRepos.setPending)},
           {
             message: "Not authorized",
             payload: {openErrorModal: true},
-            type: "GITHUB_REPOS/SEARCH_GITHUB_REPOS_REJECTED"
+            type: getType(searchGithubRepos.setRejected)
           }
         ]);
       });
@@ -175,7 +175,7 @@ describe("GithubReposSaga", () => {
         (new GithubReposSaga(octokitMock as any)).fetchGithubRepos,
         {
           payload: {order: "desc", page: 0, perPage: 10, q: "created:>2019-01-01", sort: "stars"},
-          type: "GITHUB_REPOS/SEARCH_GITHUB_REPOS"
+          type: getType(searchGithubRepos.invoke)
         }
       ).toPromise().catch((err) => expect(err).toEqual({message: "Some javascript error"}));
     });

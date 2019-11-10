@@ -19,12 +19,12 @@ describe("SettingsSaga", () => {
         (new SettingsSaga(null)).fetchTranslations,
         {
           payload: "en",
-          type: "SETTINGS/SET_LANGUAGE"
+          type: getType(setLanguage.invoke)
         }
       ).toPromise().then(() => {
         expect(dispatched).toEqual([
-          {payload: null, type: "SETTINGS/SET_LANGUAGE_PENDING"},
-          {payload: {"Translation Key": "Translation Value"}, type: "SETTINGS/SET_LANGUAGE_FULFILLED"}
+          {payload: null, type: getType(setLanguage.setPending)},
+          {payload: {"Translation Key": "Translation Value"}, type: getType(setLanguage.setFulfilled)}
         ]);
       });
     });
@@ -40,12 +40,12 @@ describe("SettingsSaga", () => {
         (new SettingsSaga(null)).fetchTranslations,
         {
           payload: "en",
-          type: "SETTINGS/SET_LANGUAGE"
+          type: getType(setLanguage.invoke)
         }
       ).toPromise().then(() => {
         expect(dispatched).toEqual([
-          {payload: null, type: "SETTINGS/SET_LANGUAGE_PENDING"},
-          {message: "Error", payload: null, type: "SETTINGS/SET_LANGUAGE_REJECTED"}
+          {payload: null, type: getType(setLanguage.setPending)},
+          {message: "Error", payload: null, type: getType(setLanguage.setRejected)}
         ]);
       });
     });

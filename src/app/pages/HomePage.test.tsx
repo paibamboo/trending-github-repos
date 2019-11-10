@@ -1,9 +1,10 @@
 import {shallow} from "enzyme";
 import * as React from "react";
+import {getType} from "typesafe-actions";
 import {GithubReposInfiniteTable} from "../components/GithubReposInfiniteTable";
 import {IGithubRepo} from "../models/GithubRepoInterfaces";
 import {IStore} from "../redux/IStore";
-import {ISearchGithubReposParams} from "../redux/modules/githubReposActionCreators";
+import {ISearchGithubReposParams, searchGithubRepos} from "../redux/modules/githubReposActionCreators";
 import {IGithubReposState} from "../redux/modules/githubReposModule";
 import {
   FIRST_PAGE,
@@ -82,7 +83,7 @@ describe("<HomePage />", () => {
     props.searchGithubRepos(searchGithubReposParams);
     expect(dispatch).toHaveBeenCalledWith({
       payload: searchGithubReposParams,
-      type: "GITHUB_REPOS/SEARCH_GITHUB_REPOS"
+      type: getType(searchGithubRepos.invoke)
     });
   });
 
@@ -107,7 +108,7 @@ describe("<HomePage />", () => {
   });
 
   it("loads github repos with FIRST_PAGE and INITIAL_PER_PAGE params once rendered", () => {
-    const searchGithubRepos = jest.fn();
+    const searchGithubReposMock = jest.fn();
     shallow(
       <UnconnectedHomePage
         error={""}
@@ -117,11 +118,11 @@ describe("<HomePage />", () => {
         page={0}
         pending={false}
         perPage={0}
-        searchGithubRepos={searchGithubRepos}
+        searchGithubRepos={searchGithubReposMock}
         translation={translation}
       />
     );
-    expect(searchGithubRepos).toHaveBeenCalledWith({
+    expect(searchGithubReposMock).toHaveBeenCalledWith({
       order: "desc",
       page: FIRST_PAGE,
       perPage: INITIAL_PER_PAGE,
@@ -131,7 +132,7 @@ describe("<HomePage />", () => {
   });
 
   it("loads github repos with SECOND_PAGE and SUBSEQUENT_PER_PAGE params on second render", () => {
-    const searchGithubRepos = jest.fn();
+    const searchGithubReposMock = jest.fn();
     const wrapper = shallow(
       <UnconnectedHomePage
         error={""}
@@ -141,13 +142,13 @@ describe("<HomePage />", () => {
         page={FIRST_PAGE}
         pending={false}
         perPage={INITIAL_PER_PAGE}
-        searchGithubRepos={searchGithubRepos}
+        searchGithubRepos={searchGithubReposMock}
         translation={translation}
       />
     );
-    expect(searchGithubRepos).not.toHaveBeenCalled();
+    expect(searchGithubReposMock).not.toHaveBeenCalled();
     wrapper.find(GithubReposInfiniteTable).simulate("loadMore");
-    expect(searchGithubRepos).toHaveBeenCalledWith({
+    expect(searchGithubReposMock).toHaveBeenCalledWith({
       order: "desc",
       page: SECOND_PAGE,
       perPage: SUBSEQUENT_PER_PAGE,
@@ -157,7 +158,7 @@ describe("<HomePage />", () => {
   });
 
   it("loads github repos with page prop plus 1 and SUBSEQUENT_PER_PAGE params on other renders", () => {
-    const searchGithubRepos = jest.fn();
+    const searchGithubReposMock = jest.fn();
     const wrapper = shallow(
       <UnconnectedHomePage
         error={""}
@@ -167,13 +168,13 @@ describe("<HomePage />", () => {
         page={5}
         pending={false}
         perPage={INITIAL_PER_PAGE}
-        searchGithubRepos={searchGithubRepos}
+        searchGithubRepos={searchGithubReposMock}
         translation={translation}
       />
     );
-    expect(searchGithubRepos).not.toHaveBeenCalled();
+    expect(searchGithubReposMock).not.toHaveBeenCalled();
     wrapper.find(GithubReposInfiniteTable).simulate("loadMore");
-    expect(searchGithubRepos).toHaveBeenCalledWith({
+    expect(searchGithubReposMock).toHaveBeenCalledWith({
       order: "desc",
       page: 6,
       perPage: SUBSEQUENT_PER_PAGE,

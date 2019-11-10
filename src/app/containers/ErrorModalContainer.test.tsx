@@ -1,7 +1,9 @@
 import {Button, Modal} from "antd";
 import {shallow} from "enzyme";
 import * as React from "react";
+import {getType} from "typesafe-actions";
 import {IStore} from "../redux/IStore";
+import {closeErrorModal} from "../redux/modules/userInterfacesActionCreators";
 import {mapDispatchToProps, mapStateToProps, UnconnectedErrorModalContainer} from "./ErrorModalContainer";
 
 describe("<ErrorModalContainer/>", () => {
@@ -34,19 +36,19 @@ describe("<ErrorModalContainer/>", () => {
     const props = mapDispatchToProps(dispatch);
     expect(dispatch).not.toHaveBeenCalled();
     props.closeErrorModal();
-    expect(dispatch).toHaveBeenCalledWith({type: "USER_INTERFACES/CLOSE_ERROR_MODAL"});
+    expect(dispatch).toHaveBeenCalledWith({type: getType(closeErrorModal)});
   });
 
   it("passes closeErrorModal prop to Modal onCancel", () => {
-    const closeErrorModal = jest.fn();
+    const closeErrorModalMock = jest.fn();
     const wrapper = shallow(
       <UnconnectedErrorModalContainer
-        closeErrorModal={closeErrorModal}
+        closeErrorModal={closeErrorModalMock}
         isErrorModalOpen={false}
         translation={{error: "", ok: "Ok"}}
       />
     );
-    expect(wrapper.find(Modal)).toHaveProp("onCancel", closeErrorModal);
+    expect(wrapper.find(Modal)).toHaveProp("onCancel", closeErrorModalMock);
   });
 
   it("passes isErrorModalOpen prop to Modal's visible", () => {
@@ -61,16 +63,16 @@ describe("<ErrorModalContainer/>", () => {
   });
 
   it("calls closeErrorModal when Ok button is clicked", () => {
-    const closeErrorModal = jest.fn();
+    const closeErrorModalMock = jest.fn();
     const wrapper = shallow(
       <UnconnectedErrorModalContainer
-        closeErrorModal={closeErrorModal}
+        closeErrorModal={closeErrorModalMock}
         isErrorModalOpen={false}
         translation={{error: "", ok: "Ok"}}
       />
     );
-    expect(closeErrorModal).not.toHaveBeenCalled();
+    expect(closeErrorModalMock).not.toHaveBeenCalled();
     wrapper.find(Button).simulate("click");
-    expect(closeErrorModal).toHaveBeenCalled();
+    expect(closeErrorModalMock).toHaveBeenCalled();
   });
 });

@@ -1,7 +1,7 @@
 language: node_js
 
 node_js:
-  - "8"
+  - "12"
 
 env:
   - NODE_ENV=ci
@@ -23,8 +23,13 @@ script:
   - npm run build
   - npm run build:prod
   - npm run test:no-cache -- --maxWorkers=4
+  - npm run doc:build
 
 after_script: greenkeeper-lockfile-upload
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
+  - mkdir ./gh-pages && mkdir ./gh-pages/web && mkdir ./gh-pages/storybook
+  - cp -r ./storybook ./gh-pages/storybook && cp -r ./build ./gh-pages/web
+  - npm i gh-pages
+  - node ./buildGithubPages.js

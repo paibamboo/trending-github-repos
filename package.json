@@ -25,7 +25,8 @@
     "test:watch": "jest --watch",
     "lint": "eslint \"src/**/**.ts*\"",
     "lint:fix": "npm run lint -s -- --fix",
-    "doc": "start-storybook -p 6060"
+    "doc": "start-storybook -p 6060",
+    "doc:build": "build-storybook -o storybook"
   },
   "author": "paibamboo",
   "homepage": "https://github.com/paibamboo/trending-github-repos",

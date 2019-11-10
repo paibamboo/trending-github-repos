@@ -41,3 +41,5 @@ node_modules
 !.idea/inspectionProfiles/
 .awcache/
 .jest/cache/
+
+storybook

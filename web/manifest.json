@@ -1,4 +1,5 @@
 {
-  "app.js": "/trending-github-repos/web/public/js/app.js",
-  "app.js.map": "/trending-github-repos/web/public/js/app.js.map"
+  "app.js": "/trending-github-repos/web/public/js/app.63efb6943c1212f4c5d8.js",
+  "vendors~app.js": "/trending-github-repos/web/public/js/vendors~app.b1fa2645ca44e863c101.js",
+  "js/vendors~app.b1fa2645ca44e863c101.js.LICENSE": "/trending-github-repos/web/public/js/vendors~app.b1fa2645ca44e863c101.js.LICENSE"
 }

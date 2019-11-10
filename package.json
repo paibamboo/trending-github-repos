@@ -16,6 +16,7 @@
     "prebuild": "npm run clean -s",
     "build": "webpack --config config/webpack/index.js",
     "build:prod": "cross-env NODE_ENV=production npm run build && node ./config/utils/replaceWithProdScripts",
+    "build:prod:gh-pages": "cross-env NODE_ENV=production cross-env GH_PAGES=1 npm run build && node ./config/utils/replaceWithProdScripts",
     "postbuild": "webpack --config config/webpack/server.js",
     "prestart": "npm run build -s",
     "start": "node build/server.js",

@@ -5,12 +5,9 @@ utils.createIfDoesntExist('./build');
 utils.createIfDoesntExist('./build/public');
 
 if (process.env.NODE_ENV === 'production') {
-  console.info("a");
   if (process.env.GH_PAGES) {
-    console.info("b");
     module.exports = require('./prodGhPages');
   } else {
-    console.info("c");
     module.exports = require('./prod');
   }
 } else {
